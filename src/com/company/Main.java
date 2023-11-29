@@ -1,6 +1,7 @@
 package com.company;
 
 import java.io.*;
+import java.sql.*;
 
 
 /**
@@ -32,7 +33,7 @@ public class Main {
 
 
         // но можно сделать проще, теперь не нужно его закрывать,
-        // автозакрытие файла
+        // авто-закрытие файла
         try(Reader reader2 = new FileReader(new File("my file"))){
             // Что-то делаем с файлом ...
         } catch (FileNotFoundException e) {
@@ -41,5 +42,37 @@ public class Main {
             e.printStackTrace();
         }
     }
-    
+
+    /**
+     * Так же можно ещё сильнее сократить, создав класс с авто закрытием
+     */
+    static class MyClose implements AutoCloseable{
+
+        @Override
+        public void close() throws Exception {
+
+        }
+    }
+
+    void method(){
+        try (
+                MyClose myClose = new MyClose();
+                Reader reader = new FileReader(new File("my file"))
+                    ){
+            // Что-то делаем с файлом ...
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // где может пригодиться авто-закрытие
+        //stream
+        Reader reader;
+        Writer writer;
+        InputStream inputStream;
+        OutputStream outputStream;
+        // gdbc
+        Connection connection;
+        Statement statement;
+        ResultSet resultSet;
+    }
 }
